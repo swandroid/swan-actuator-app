@@ -1,19 +1,17 @@
 package `in`.dragonbra.swanactuatordemo
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import `in`.dragonbra.swanactuatordemo.ui.main.MainFragment
+import android.support.v7.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow()
-        }
+        setupActionBarWithNavController(findNavController(R.id.container))
     }
 
+    override fun onSupportNavigateUp() = findNavController(R.id.container).navigateUp()
 }
