@@ -21,6 +21,11 @@ class MainViewModel(private val context: SADApp) : ViewModel() {
     }
 
     val sensorValue: MutableLiveData<Float> = MutableLiveData()
+        get() {
+            ExpressionManager.unregisterExpression(context, SENSOR_ID)
+            ExpressionManager.registerExpression(context, SENSOR_ID, EXPRESSION, sensorListener)
+            return field
+        }
 
     private val sensorListener = object: ExpressionListener {
         override fun onNewState(id: String?, timestamp: Long, newState: TriState?) {
@@ -32,11 +37,6 @@ class MainViewModel(private val context: SADApp) : ViewModel() {
                 sensorValue.value = newValues[0].value as Float
             }
         }
-    }
-
-    init {
-        ExpressionManager.unregisterExpression(context, SENSOR_ID)
-        ExpressionManager.registerExpression(context, SENSOR_ID, EXPRESSION, sensorListener)
     }
 
     override fun onCleared() {
