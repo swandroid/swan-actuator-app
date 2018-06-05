@@ -1,5 +1,6 @@
 package `in`.dragonbra.swanactuatordemo.module
 
+import `in`.dragonbra.swanactuatordemo.SADApp
 import `in`.dragonbra.swanactuatordemo.ui.main.MainViewModel
 import `in`.dragonbra.swanactuatordemo.viewmodel.SADViewModelProvider
 import dagger.Module
@@ -16,5 +17,5 @@ class ViewModelModule {
 
     @Provides
     @Singleton
-    fun provideMainViewModel() = MainViewModel()
+    fun provideMainViewModel(context: SADApp) = MainViewModel(context)
 }
