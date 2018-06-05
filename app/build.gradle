@@ -27,7 +27,7 @@ dependencies {
     def anko_version = '0.10.4'
     def dagger_version = '2.14.1'
     def nav_version = "1.0.0-alpha01"
-    def swan_version = "1.0.4"
+    def swan_version = "1.0.5-SNAPSHOT"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -44,7 +44,9 @@ dependencies {
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    implementation "interdroid.swancore.swanmain:swaninterface:$swan_version"
+    implementation ("interdroid.swancore.swanmain:swaninterface:$swan_version") {
+        changing = true
+    }
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
