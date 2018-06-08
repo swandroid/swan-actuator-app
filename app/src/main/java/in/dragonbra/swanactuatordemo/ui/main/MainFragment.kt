@@ -36,6 +36,8 @@ class MainFragment : Fragment() {
                 message.text = "Value = $it lux"
             }
         })
+
+        viewModel.registerSensors()
     }
 
 }
