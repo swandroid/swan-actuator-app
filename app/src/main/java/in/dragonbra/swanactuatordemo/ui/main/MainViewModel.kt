@@ -6,8 +6,6 @@ import android.arch.lifecycle.ViewModel
 import android.util.Log
 import interdroid.swancore.swanmain.ActuatorManager
 import interdroid.swancore.swanmain.ExpressionListener
-import interdroid.swancore.swanmain.ExpressionManager
-import interdroid.swancore.swansong.ExpressionFactory
 import interdroid.swancore.swansong.TimestampedValue
 import interdroid.swancore.swansong.TriState
 
@@ -18,8 +16,15 @@ class MainViewModel(private val context: SADApp) : ViewModel() {
 
         private const val SENSOR_ID = "sad_lux"
         private const val ACTUATOR_ID = "sad_lux_vibr"
-        private const val ACTUATOR_EXPRESSION = "self@light:lux{ANY,0}<1.0THENself@vibrator:vibrate?duration='500'"
-        private val EXPRESSION = ExpressionFactory.parse("self@light:lux?delay='20000'{ANY,0}")
+        private const val ACTUATOR_EXPRESSION = "self@light:lux{ANY,0}<10.0THEN" +
+                "self@vibrator:vibrate?duration='500'&&" +
+                "self@logger:log?tag='SwanActuatorDemo'#priority='3'#message='Low light detected'"
+        private const val SENSOR_EXPRESSION = "self@light:lux?delay='20000'{ANY,0}THEN" +
+                "self@http:post?" +
+                "server_url='https://dragonbra.in/swan-act/'#" +
+                "server_http_authorization='NoAuth'#" +
+                "server_http_body_type='application/json'#" +
+                "server_http_body='message:hi'"
     }
 
     val sensorValue: MutableLiveData<Float> = MutableLiveData()
@@ -37,15 +42,15 @@ class MainViewModel(private val context: SADApp) : ViewModel() {
     }
 
     fun registerSensors() {
-        ActuatorManager.unregisterActuator(context, ACTUATOR_ID)
+        ActuatorManager.unregisterActuator(context, ACTUATOR_ID, false)
         ActuatorManager.registerActuator(context, ACTUATOR_ID, ACTUATOR_EXPRESSION, sensorListener)
 
-        ExpressionManager.unregisterExpression(context, SENSOR_ID)
-        ExpressionManager.registerExpression(context, SENSOR_ID, EXPRESSION, sensorListener)
+        ActuatorManager.unregisterActuator(context, SENSOR_ID, false)
+        ActuatorManager.registerActuator(context, SENSOR_ID, SENSOR_EXPRESSION, sensorListener)
     }
 
     override fun onCleared() {
-        ActuatorManager.unregisterActuator(context, ACTUATOR_ID)
-        ExpressionManager.unregisterExpression(context, SENSOR_ID)
+        ActuatorManager.unregisterActuator(context, ACTUATOR_ID, false)
+        ActuatorManager.unregisterActuator(context, SENSOR_ID, false)
     }
 }
