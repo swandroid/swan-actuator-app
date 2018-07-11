@@ -124,6 +124,7 @@ class MainFragment : Fragment(), ActuatorAdapter.OnActuatorSelectedListener {
         if (!registered) {
             actuators.removeAt(position)
             adapter.notifyDataSetChanged()
+            sensorExpressionText.text = buildExpression()
         }
     }
 
